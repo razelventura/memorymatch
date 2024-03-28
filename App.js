@@ -98,7 +98,7 @@ const App = () => {
     setCards(currentCards =>
       currentCards.map((card, i) => {
         if (i === index) {
-          console.log(`Card at index ${index} is flipped: ${!card.isFlipped}`);
+          //console.log(`Card at index ${index} is flipped: ${!card.isFlipped}`);
           return { ...card, isFlipped: !card.isFlipped };
         }
         return card;

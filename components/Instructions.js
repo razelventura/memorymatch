@@ -1,27 +1,25 @@
-// TO DO: Modify instructions
-
-//Mobile App Devt (CIT2269) Assignment 2
+//Mobile App Devt (CIT2269) Assignment 4
 //author: Razel Ventura, s0541328
-//date: 2024-02-12
+//date: 2024-03-29
 //Instructions.js
 //brief: This component contains the instructions to the game.  
 
 const instructionsText = `
-Welcome to Mines Wept! Here's how to play:
+Welcome to Memory Match! Here's how to play:
 
-1. Select a cell and hope it is not a mine. If you see a 😃 then there is no mine adjacent to that cell. If you see a 😯 then there is at least one mine adjacent to it.
+1. Tap a card to reveal an image.
 
-2. If you think a cell contains a mine, long press to put a flag 🚩 on it. That way, you don't accidentally blow up. Long press again to remove a flag.
+2. You goal is to reveal consecutive matching cards. Matched cards will remain revealed.
 
-3. You win by uncovering all the non-mines without blowing up. 
+3. You win by revealing all the matches. 
 
-4. The more non-mines you uncover, the more points you get. You also get more points for quicker time and higher difficulty.
+4. The quicker you reveal all the matches, the more points you earn.
 
-5. Chickening out and can't handle the pressure? Just "Give Up". It will still give you a score.
+5. Click "Reset" to reset the current board and the time. This will not shuffle the cards, but this will un-reveal all matches you have already made.
 
-6. But if you want to chicken out without a trace, just click "New Game". You won't see how low you scored.
+6. Click "New Game" to start with a new reshuffled board.
 
-That's it! May the odds be ever in your favor!
+Get that brain exercising! Enjoy!
 `;
 
 export default instructionsText;
