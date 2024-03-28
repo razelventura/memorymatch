@@ -10,7 +10,9 @@ const GameBoard = ({
   flippedCards, 
   setFlippedCards, 
   matchedCards, 
-  setMatchedCards }) => {
+  setMatchedCards,
+  difficulty,
+}) => {
 
   // Function to handle flipping a card
   const flipCard = (index) => {
@@ -36,10 +38,19 @@ const GameBoard = ({
     }
   };
 
-  // Calculate the number of columns and card size based on screen width
+  // Adjust the number of cards per row based on difficulty
+  const cardConfig = {
+    easy: { rows: 3, cols: 4 },
+    intermediate: { rows: 4, cols: 4 },
+    difficult: { rows: 4, cols: 5 },
+  };
+
+  const { rows, cols } = cardConfig[difficulty];
+
+  // Calculate the card size
   const screenWidth = Dimensions.get('window').width;
   const cardMargin = 5;
-  const cardSize = (screenWidth - cardMargin * 2 * 3) / 3; // 3 cards per row TO DO: adjust per difficulty level
+  const cardSize = (screenWidth - cardMargin * 2 * (cols + 1)) / cols;
 
   return (
     <View style={styles.board}>
@@ -47,7 +58,7 @@ const GameBoard = ({
         <Card
           key={index}
           image={card.image}
-          onPress={() => flipCard(index)}
+          onPress={() => onCardPress(index)}
           size={cardSize}
           isFlipped={flippedCards.includes(index) || matchedCards.includes(index)}
         />
