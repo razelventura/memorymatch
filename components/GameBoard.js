@@ -3,9 +3,14 @@ import React, { useState } from 'react';
 import { View, StyleSheet, Dimensions } from 'react-native';
 import Card from './Card';
 
-const GameBoard = ({ cards, onMatch }) => {
-  const [flippedCards, setFlippedCards] = useState([]);
-  const [matchedCards, setMatchedCards] = useState([]);
+const GameBoard = ({ 
+  cards, 
+  onMatch, 
+  onCardPress, 
+  flippedCards, 
+  setFlippedCards, 
+  matchedCards, 
+  setMatchedCards }) => {
 
   // Function to handle flipping a card
   const flipCard = (index) => {
@@ -45,7 +50,6 @@ const GameBoard = ({ cards, onMatch }) => {
           onPress={() => flipCard(index)}
           size={cardSize}
           isFlipped={flippedCards.includes(index) || matchedCards.includes(index)}
-          isMatched={matchedCards.includes(index)}
         />
       ))}
     </View>

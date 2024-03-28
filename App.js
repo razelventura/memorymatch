@@ -18,6 +18,9 @@ const App = () => {
       // Will add more cards as needed
     ];
 
+    const [flippedCards, setFlippedCards] = useState([]);
+    const [matchedCards, setMatchedCards] = useState([]);
+
   // Shuffle cards
   const shuffleCards = (cards) => {
     // Shuffling logic here (Fisher-Yates shuffle, etc.)
@@ -26,9 +29,35 @@ const App = () => {
 
   const [cards, setCards] = useState(shuffleCards(initialCardsData));
 
-  // Define handleMatch function
+  // handleMatch function
   const handleMatch = (selectedCard) => {
     // Match checking logic here
+  };
+
+  // Toggle flip state of a card
+  const toggleFlip = (index) => {
+    setCards(currentCards =>
+      currentCards.map((card, i) => {
+        if (i === index) {
+          return { ...card, isFlipped: !card.isFlipped };
+        }
+        return card;
+      }),
+    );
+  };
+
+  // Reset Game - Reset the cards without shuffling
+  const resetGame = () => {
+    setFlippedCards([]);
+    setMatchedCards([]);
+    setCards(currentCards => currentCards.map(card => ({ ...card, isFlipped: false })));
+  };
+
+  // New Game - Shuffle the cards and set them to an unflipped state
+  const newGame = () => {
+    setFlippedCards([]);
+    setMatchedCards([]);
+    setCards(shuffleCards(initialCardsData.map(card => ({ ...card, isFlipped: false }))));
   };
 
   // Function to show instructions
@@ -42,9 +71,21 @@ const App = () => {
         source={require('./assets/icon.png')} // TO DO: change to actual logo
         style={styles.logo}
       />
-      <Button title="How to Play" onPress={showInstructions} />
-      <Text> Scores, restart button, etc will appear here </Text>
-       <GameBoard cards={cards} onMatch={handleMatch} /> 
+        <View style={styles.buttonContainer}>
+          <Button title="Reset" onPress={resetGame} />
+          <Button title="New Game" onPress={newGame} />
+          <Button title="How to Play" onPress={showInstructions} />
+      </View>
+      <Text> Scores and Timer will appear here </Text>
+      <GameBoard
+        cards={cards}
+        onCardPress={toggleFlip}
+        onMatch={handleMatch}
+        flippedCards={flippedCards}
+        setFlippedCards={setFlippedCards}
+        matchedCards={matchedCards}
+        setMatchedCards={setMatchedCards}
+      />
       {/* TO DO: Add additional UI elements like score, restart button, etc. */}
     </View>
   );
@@ -61,6 +102,12 @@ const styles = StyleSheet.create({
     height: 200, 
     resizeMode: 'contain', // To fit image within the dimensions without stretching
     marginTop: 40, 
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    width: '100%', // Ensure the buttons are spaced across the width of the screen
+    marginBottom: 20, // Space between the buttons and the game board
   },
 });
 
