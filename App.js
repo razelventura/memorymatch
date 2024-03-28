@@ -10,11 +10,11 @@ const App = () => {
   // TO DO : Add game setup and logic here, including handling orientation, saving and loading game state, and using camera for custom images
     // Example card data
     const initialCardsData = [
-      { id: 1, image: require('./assets/favicon.png'), matched: false },
-      { id: 2, image: require('./assets/icon.png'), matched: false },
+      { id: 1, image: require('./assets/favicon.png'), matched: false, isFlipped: false },
+      { id: 2, image: require('./assets/icon.png'), matched: false, isFlipped: false },
       // Duplicate each card for matching
-      { id: 1, image: require('./assets/favicon.png'), matched: false },
-      { id: 2, image: require('./assets/icon.png'), matched: false },
+      { id: 1, image: require('./assets/favicon.png'), matched: false, isFlipped: false },
+      { id: 2, image: require('./assets/icon.png'), matched: false, isFlipped: false },
       // Will add more cards as needed
     ];
 

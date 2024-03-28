@@ -2,7 +2,7 @@
 import React from 'react';
 import { TouchableOpacity, Image, StyleSheet } from 'react-native';
 
-const Card = ({ image, onPress, size }) => {
+const Card = ({ image, onPress, size, isFlipped }) => {
   const cardStyle = {
     width: size,
     height: size,
@@ -12,6 +12,7 @@ const Card = ({ image, onPress, size }) => {
     borderWidth: 1,
     borderColor: '#000',
     borderRadius: 10,
+    backgroundColor: 'lightgrey', // Back of the card, not flipped
   };
 
   // Since images are local for now, the source can be directly assigned 
@@ -20,7 +21,9 @@ const Card = ({ image, onPress, size }) => {
 
   return (
     <TouchableOpacity onPress={onPress} style={cardStyle}>
+      {isFlipped && ( 
       <Image source={imageSource} style={{ width: '100%', height: '100%', borderRadius: 10 }} />
+      )}
     </TouchableOpacity>
   );
 };

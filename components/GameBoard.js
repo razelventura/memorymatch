@@ -34,7 +34,7 @@ const GameBoard = ({ cards, onMatch }) => {
   // Calculate the number of columns and card size based on screen width
   const screenWidth = Dimensions.get('window').width;
   const cardMargin = 5;
-  const cardSize = (screenWidth - cardMargin * 2 * 3) / 3; // 3 cards per row - adjust this based on your design
+  const cardSize = (screenWidth - cardMargin * 2 * 3) / 3; // 3 cards per row TO DO: adjust per difficulty level
 
   return (
     <View style={styles.board}>
