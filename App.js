@@ -1,7 +1,7 @@
 //TODO: Implement database
 
 // App.js
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Alert, Button, Image, Text, StyleSheet, View } from 'react-native';
 import GameBoard from './components/GameBoard';
 import instructionsText from './components/Instructions';
@@ -10,16 +10,35 @@ const App = () => {
   // TO DO : Add game setup and logic here, including handling orientation, saving and loading game state, and using camera for custom images
     // Example card data
     const initialCardsData = [
-      { id: 1, image: require('./assets/favicon.png'), matched: false, isFlipped: false },
-      { id: 2, image: require('./assets/icon.png'), matched: false, isFlipped: false },
+      { id: 1, image: require('./pics/image1.jpeg'), matched: false, isFlipped: false },
+      { id: 2, image: require('./pics/image2.jpeg'), matched: false, isFlipped: false },
+/*       { id: 3, image: require('./pics/image3.jpeg'), matched: false, isFlipped: false },
+      { id: 4, image: require('./pics/image4.jpeg'), matched: false, isFlipped: false },
+      { id: 5, image: require('./pics/image5.jpeg'), matched: false, isFlipped: false },
+      { id: 6, image: require('./pics/image6.jpeg'), matched: false, isFlipped: false },
+      { id: 7, image: require('./pics/image7.jpeg'), matched: false, isFlipped: false },
+      { id: 8, image: require('./pics/image8.jpeg'), matched: false, isFlipped: false },
+      { id: 9, image: require('./pics/image9.jpeg'), matched: false, isFlipped: false },
+      { id: 10, image: require('./pics/image10.jpeg'), matched: false, isFlipped: false }, */
       // Duplicate each card for matching
-      { id: 1, image: require('./assets/favicon.png'), matched: false, isFlipped: false },
-      { id: 2, image: require('./assets/icon.png'), matched: false, isFlipped: false },
+      { id: 1, image: require('./pics/image1.jpeg'), matched: false, isFlipped: false },
+      { id: 2, image: require('./pics/image2.jpeg'), matched: false, isFlipped: false },
+/*       { id: 3, image: require('./pics/image3.jpeg'), matched: false, isFlipped: false },
+      { id: 4, image: require('./pics/image4.jpeg'), matched: false, isFlipped: false },
+      { id: 5, image: require('./pics/image5.jpeg'), matched: false, isFlipped: false },
+      { id: 6, image: require('./pics/image6.jpeg'), matched: false, isFlipped: false },
+      { id: 7, image: require('./pics/image7.jpeg'), matched: false, isFlipped: false },
+      { id: 8, image: require('./pics/image8.jpeg'), matched: false, isFlipped: false },
+      { id: 9, image: require('./pics/image9.jpeg'), matched: false, isFlipped: false },
+      { id: 10, image: require('./pics/image10.jpeg'), matched: false, isFlipped: false }, */
       // Will add more cards as needed
     ];
 
     const [flippedCards, setFlippedCards] = useState([]);
     const [matchedCards, setMatchedCards] = useState([]);
+    const [timer, setTimer] = useState(0);
+    const timerRef = useRef(null);
+    const [baseTimeScore, setBaseTimeScore] = useState(500); 
 
   // Shuffle cards
   const shuffleCards = (cards) => {
@@ -50,6 +69,8 @@ const App = () => {
   const resetGame = () => {
     setFlippedCards([]);
     setMatchedCards([]);
+    setTimer(0); // Reset the timer
+    startTimer(); // Start the timer for the new game
     setCards(currentCards => currentCards.map(card => ({ ...card, isFlipped: false })));
   };
 
@@ -57,12 +78,32 @@ const App = () => {
   const newGame = () => {
     setFlippedCards([]);
     setMatchedCards([]);
+    setTimer(0); // Reset the timer
+    startTimer(); // Start the timer for the new game
     setCards(shuffleCards(initialCardsData.map(card => ({ ...card, isFlipped: false }))));
   };
 
-  // Function to show instructions
+  // Function to show instructions (adapted from Mines Wept)
   const showInstructions = () => {
     Alert.alert("Instructions", instructionsText);
+  };
+
+  //Start timer (adapted from Mines Wept)
+  const startTimer = () => {
+    if (timerRef.current !== null) return;
+    setTimer(0);
+    timerRef.current = setInterval(() => {
+      setTimer(t => t + 1);
+      //setBaseTimeScore(score => score - 1 * difficulties[difficulty].mineCount);
+    }, 1000);
+  };
+
+  //Stop timer (adapted from Mines Wept)
+  const stopTimer = () => {
+    if (timerRef.current !== null) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
+    }
   };
 
   return (
@@ -77,6 +118,7 @@ const App = () => {
           <Button title="How to Play" onPress={showInstructions} />
       </View>
       <Text> Scores and Timer will appear here </Text>
+      <Text>Time (seconds): {timer}</Text>
       <GameBoard
         cards={cards}
         onCardPress={toggleFlip}
