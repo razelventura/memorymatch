@@ -2,7 +2,7 @@
 import React from 'react';
 import { TouchableOpacity, Image, StyleSheet } from 'react-native';
 
-const Card = ({ imageUri, onPress, size }) => {
+const Card = ({ image, onPress, size }) => {
   const cardStyle = {
     width: size,
     height: size,
@@ -14,9 +14,13 @@ const Card = ({ imageUri, onPress, size }) => {
     borderRadius: 10,
   };
 
+  // Since images are local for now, the source can be directly assigned 
+  //TO DO: change this later to uri when database is implemented
+  const imageSource = image; // `image` is already a number returned from require
+
   return (
     <TouchableOpacity onPress={onPress} style={cardStyle}>
-      <Image source={{ uri: imageUri }} style={{ width: '100%', height: '100%', borderRadius: 10 }} />
+      <Image source={imageSource} style={{ width: '100%', height: '100%', borderRadius: 10 }} />
     </TouchableOpacity>
   );
 };

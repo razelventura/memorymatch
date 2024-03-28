@@ -1,10 +1,55 @@
 // GameBoard.js
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { View, StyleSheet, Dimensions } from 'react-native';
 import Card from './Card';
 
 const GameBoard = ({ cards, onMatch }) => {
-  // Use a state to manage the flipped cards and matches
+  const [flippedCards, setFlippedCards] = useState([]);
+  const [matchedCards, setMatchedCards] = useState([]);
+
+  // Function to handle flipping a card
+  const flipCard = (index) => {
+    const card = cards[index];
+
+    // Check if we should flip back the card
+    if (flippedCards.includes(index)) {
+      setFlippedCards(flippedCards.filter(i => i !== index));
+      return;
+    }
+
+    // Check if we should match cards
+    if (flippedCards.length === 1) {
+      const firstCardIndex = flippedCards[0];
+      const firstCard = cards[firstCardIndex];
+      if (firstCard.id === card.id) {
+        setMatchedCards([...matchedCards, firstCardIndex, index]);
+        onMatch(card); // This function can be used to handle score updates or any other match logic
+      }
+      setFlippedCards([]); // Reset flipped cards
+    } else {
+      setFlippedCards([index]); // Flip the new card
+    }
+  };
+
+  // Calculate the number of columns and card size based on screen width
+  const screenWidth = Dimensions.get('window').width;
+  const cardMargin = 5;
+  const cardSize = (screenWidth - cardMargin * 2 * 3) / 3; // 3 cards per row - adjust this based on your design
+
+  return (
+    <View style={styles.board}>
+      {cards.map((card, index) => (
+        <Card
+          key={index}
+          image={card.image}
+          onPress={() => flipCard(index)}
+          size={cardSize}
+          isFlipped={flippedCards.includes(index) || matchedCards.includes(index)}
+          isMatched={matchedCards.includes(index)}
+        />
+      ))}
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({
@@ -13,6 +58,7 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     justifyContent: 'center',
     alignItems: 'center',
+    // Add padding if needed
   },
 });
 
