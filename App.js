@@ -72,7 +72,6 @@ const App = () => {
 
   // Shuffle cards
   const shuffleCards = (cards) => {
-    // Shuffling logic here (Fisher-Yates shuffle, etc.)
     return cards.sort(() => Math.random() - 0.5);
   };
 
@@ -205,7 +204,6 @@ const App = () => {
       />
         <View style={styles.buttonContainer}>
           <Button title="Reset" onPress={resetGame} />
-          {/* <Button title="New Game" onPress={newGame} /> */}
           <Button title="How to Play" onPress={showInstructions} />
         </View>
 

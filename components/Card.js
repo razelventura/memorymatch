@@ -17,14 +17,13 @@ const Card = ({ image, onPress, size, isFlipped }) => {
   const cardBackImage = require('../assets/cardcover.png');
 
   // Image for the front of the card (when flipped)
-  const cardFrontImage = image; // Assuming `image` is a require statement or similar
+  const cardFrontImage = image; 
 
   // Determine which image to show based on whether the card is flipped
   const imageSource = isFlipped ? cardFrontImage : cardBackImage;
 
   return (
     <TouchableOpacity onPress={onPress} style={cardStyle}>
-      {/* Render the determined image */}
       <Image source={imageSource} style={{ width: '100%', height: '100%', borderRadius: 10 }} />
     </TouchableOpacity>
   );
