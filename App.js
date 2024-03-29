@@ -1,49 +1,46 @@
-//TODO: Implement database
-
 // App.js
 import React, { useState, useEffect, useRef } from 'react';
-import { Alert, Button, Image, Text, StyleSheet, Vibration, View } from 'react-native';
+import { Alert, Button, Image, Text, StyleSheet, TouchableOpacity, Vibration, View } from 'react-native';
 import GameBoard from './components/GameBoard';
 import instructionsText from './components/Instructions';
 import * as ScreenOrientation from 'expo-screen-orientation';
 import {Audio} from 'expo-av';
 
 const App = () => {
-  // TO DO : Add game setup and logic here, including handling orientation, saving and loading game state, and using camera for custom images
-    // Example card data
-    const initialCardsData = [
-      { id: 1, image: require('./pics/image1.jpeg'), matched: false, isFlipped: false },
-      { id: 2, image: require('./pics/image2.jpeg'), matched: false, isFlipped: false },
-      { id: 3, image: require('./pics/image3.jpeg'), matched: false, isFlipped: false },
-      { id: 4, image: require('./pics/image4.jpeg'), matched: false, isFlipped: false },
-      //{ id: 5, image: require('./pics/image5.jpeg'), matched: false, isFlipped: false },
-      //{ id: 6, image: require('./pics/image6.jpeg'), matched: false, isFlipped: false },
-      //{ id: 7, image: require('./pics/image7.jpeg'), matched: false, isFlipped: false },
-      //{ id: 8, image: require('./pics/image8.jpeg'), matched: false, isFlipped: false },
-      //{ id: 9, image: require('./pics/image9.jpeg'), matched: false, isFlipped: false },
-      //{ id: 10, image: require('./pics/image10.jpeg'), matched: false, isFlipped: false },
-      
-      // Duplicate each card for matching
-      { id: 1, image: require('./pics/image1.jpeg'), matched: false, isFlipped: false },
-      { id: 2, image: require('./pics/image2.jpeg'), matched: false, isFlipped: false },
-      { id: 3, image: require('./pics/image3.jpeg'), matched: false, isFlipped: false },
-      { id: 4, image: require('./pics/image4.jpeg'), matched: false, isFlipped: false },
-      //{ id: 5, image: require('./pics/image5.jpeg'), matched: false, isFlipped: false },
-      //{ id: 6, image: require('./pics/image6.jpeg'), matched: false, isFlipped: false },
-      //{ id: 7, image: require('./pics/image7.jpeg'), matched: false, isFlipped: false },
-      //{ id: 8, image: require('./pics/image8.jpeg'), matched: false, isFlipped: false },
-      //{ id: 9, image: require('./pics/image9.jpeg'), matched: false, isFlipped: false },
-      //{ id: 10, image: require('./pics/image10.jpeg'), matched: false, isFlipped: false },
-    ];
 
-    const [flippedCards, setFlippedCards] = useState([]);
-    const [matchedCards, setMatchedCards] = useState([]);
-    const [timer, setTimer] = useState(0);
-    const timerRef = useRef(null);
-    const [baseTimeScore, setBaseTimeScore] = useState(500); 
-    const [revealScore, setRevealScore] = useState(0);
-    const [finalScore, setFinalScore] = useState(0);
-    const [highScore, setHighScore] = useState(0);
+  const [flippedCards, setFlippedCards] = useState([]);
+  const [matchedCards, setMatchedCards] = useState([]);
+  const [timer, setTimer] = useState(0);
+  const timerRef = useRef(null);
+  const [baseTimeScore, setBaseTimeScore] = useState(500); 
+  const [revealScore, setRevealScore] = useState(0);
+  const [finalScore, setFinalScore] = useState(0);
+  const [highScore, setHighScore] = useState(0);
+  const [difficulty, setDifficulty] = useState('easy'); 
+
+    // All available cards
+    const allCardsData = [
+      { id: 1, image: require('./pics/image1.jpeg'), matched: false, isFlipped: false },
+      { id: 2, image: require('./pics/image2.jpeg'), matched: false, isFlipped: false },
+      { id: 3, image: require('./pics/image3.jpeg'), matched: false, isFlipped: false },
+      { id: 4, image: require('./pics/image4.jpeg'), matched: false, isFlipped: false },
+      { id: 5, image: require('./pics/image5.jpeg'), matched: false, isFlipped: false },
+      { id: 6, image: require('./pics/image6.jpeg'), matched: false, isFlipped: false },
+      { id: 7, image: require('./pics/image7.jpeg'), matched: false, isFlipped: false },
+      { id: 8, image: require('./pics/image8.jpeg'), matched: false, isFlipped: false },
+      { id: 9, image: require('./pics/image9.jpeg'), matched: false, isFlipped: false },
+      { id: 10, image: require('./pics/image10.jpeg'), matched: false, isFlipped: false },
+    ].reduce((acc, card) => ([...acc, card, { ...card }]), []); // Duplicate each card for matching
+
+    // Difficulty levels and the range of card IDs they include
+    const difficultyLevels = {
+      easy: [1, 4], // IDs 1 to 4
+      intermediate: [1, 6], // IDs 1 to 6
+      difficult: [1, 10], // IDs 1 to 10
+    };
+
+    // Filter initialCardsData based on difficulty
+    const initialCardsData = allCardsData.filter(card => card.id >= difficultyLevels[difficulty][0] && card.id <= difficultyLevels[difficulty][1]);
 
   //Start timer (adapted from Mines Wept)
   const startTimer = () => {
@@ -65,9 +62,9 @@ const App = () => {
 
   // useEffect to handle component mount and unmount
   useEffect(() => {
-    newGame();
-    //newGame('easy'); // Set the new game to easy on first load
-    startTimer();    // Start the timer immediately
+    //newGame();
+    newGame('easy'); // Set the new game to easy on first load
+    //startTimer();    // Start the timer immediately
     
     // Cleanup function to stop the timer when the component unmounts
     return () => stopTimer(); 
@@ -103,11 +100,10 @@ const App = () => {
   
       setCards(updatedCards);
       setMatchedCards(currentMatched => [...currentMatched, matchedIndices[0], matchedIndices[1]]); // matchedCards state only updated if a pair is found
-      //setMatchedCards(currentMatched => [...currentMatched, ...matchedIndices]);
       setRevealScore(currentScore => currentScore + 50); // Add 50 points for the match
 
       // Vibrate to indicate a match
-      Vibration.vibrate(500) // 500ms
+      Vibration.vibrate(200) // 200ms
     }
   };
 
@@ -133,16 +129,33 @@ const App = () => {
   };
 
   // New Game - Shuffle the cards and set them to an unflipped state
-  const newGame = () => {
+  const newGame = (difficultySetting = difficulty) => {
+    const filteredCards = shuffleCards(
+      allCardsData.filter(card =>
+        card.id >= difficultyLevels[difficultySetting][0] && card.id <= difficultyLevels[difficultySetting][1]
+      ).map(card => ({ ...card, isFlipped: false }))
+    );
+  
+    // Reset everything for a new game
     setFlippedCards([]);
     setMatchedCards([]);
     setTimer(0); // Reset the timer
+    setBaseTimeScore(500); // Reset base score
+    setRevealScore(0); // Reset reveal score
+    setCards(filteredCards); // Set the newly filtered and shuffled cards
+  
     startTimer(); // Start the timer for the new game
-    setCards(shuffleCards(initialCardsData.map(card => ({ ...card, isFlipped: false }))));
   };
 
+// Function to change difficulty and reset the game
+  const changeDifficulty = (newDifficulty) => {
+  stopTimer(); // Stop the current timer
+  setDifficulty(newDifficulty); // Update the difficulty state
+  newGame(newDifficulty); // Start a new game with the new difficulty
+};
+
   const soundObject = new Audio.Sound();
-  
+
   // Play win sound
   async function playWinSound() {
     try {
@@ -155,7 +168,6 @@ const App = () => {
       console.error(error);
     }
   }
-  
   
   //Check for win conditions
   useEffect(() => {
@@ -193,9 +205,25 @@ const App = () => {
       />
         <View style={styles.buttonContainer}>
           <Button title="Reset" onPress={resetGame} />
-          <Button title="New Game" onPress={newGame} />
+          {/* <Button title="New Game" onPress={newGame} /> */}
           <Button title="How to Play" onPress={showInstructions} />
-      </View>
+        </View>
+
+        <View style={styles.difficultyContainer}>
+              {Object.keys(difficultyLevels).map((level) => (
+              <TouchableOpacity
+                key={level}
+                style={[
+                  styles.button,
+                  difficulty === level ? styles.selectedButton : {}
+                ]}
+                onPress={() => changeDifficulty(level)}
+              >
+                <Text style={styles.buttonText}>{level}</Text>
+              </TouchableOpacity>
+            ))}
+        </View>
+
       <Text> Current High Score: {highScore}</Text>
       <Text>Time (seconds): {timer}</Text>
       <GameBoard
@@ -207,7 +235,6 @@ const App = () => {
         matchedCards={matchedCards}
         setMatchedCards={setMatchedCards}
       />
-      {/* TO DO: Add additional UI elements like score, restart button, etc. */}
     </View>
   );
 };
@@ -227,8 +254,34 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    width: '100%', // Ensure the buttons are spaced across the width of the screen
-    marginBottom: 20, // Space between the buttons and the game board
+    //width: '100%', // Ensure the buttons are spaced across the width of the screen
+    //marginBottom: 20, // Space between the buttons and the game board
+  },
+  difficultyContainer: {
+    flexDirection: 'row', 
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignContent: 'center',
+    //padding: 10,
+  },
+  button: {
+    backgroundColor: '#007bff',
+    padding: 10,
+    borderRadius: 5,
+    margin: 5,
+  },
+  selectedButton: {
+    backgroundColor: '#004c8c', 
+    padding: 10,
+    borderRadius: 5,
+    margin: 5,
+    borderWidth: 2,
+    borderColor: '#ffffff', 
+  },  
+  buttonText: {
+    color: 'white',
+    fontSize: 16,
+    alignItems: 'center',
   },
 });
 
