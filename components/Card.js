@@ -1,4 +1,3 @@
-// Card.js
 import React from 'react';
 import { TouchableOpacity, Image, StyleSheet } from 'react-native';
 
@@ -12,18 +11,21 @@ const Card = ({ image, onPress, size, isFlipped }) => {
     borderWidth: 1,
     borderColor: '#000',
     borderRadius: 10,
-    backgroundColor: 'lightgrey', // Back of the card, not flipped
   };
 
-  // Since images are local for now, the source can be directly assigned 
-  //TO DO: change this later to uri when database is implemented
-  const imageSource = image; // `image` is already a number returned from require
+  // Image for the back of the card (when not flipped)
+  const cardBackImage = require('../assets/cardcover.png');
+
+  // Image for the front of the card (when flipped)
+  const cardFrontImage = image; // Assuming `image` is a require statement or similar
+
+  // Determine which image to show based on whether the card is flipped
+  const imageSource = isFlipped ? cardFrontImage : cardBackImage;
 
   return (
     <TouchableOpacity onPress={onPress} style={cardStyle}>
-      {isFlipped && ( 
+      {/* Render the determined image */}
       <Image source={imageSource} style={{ width: '100%', height: '100%', borderRadius: 10 }} />
-      )}
     </TouchableOpacity>
   );
 };
