@@ -5,6 +5,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Alert, Button, Image, Text, StyleSheet, View } from 'react-native';
 import GameBoard from './components/GameBoard';
 import instructionsText from './components/Instructions';
+import * as ScreenOrientation from 'expo-screen-orientation';
 
 const App = () => {
   // TO DO : Add game setup and logic here, including handling orientation, saving and loading game state, and using camera for custom images
