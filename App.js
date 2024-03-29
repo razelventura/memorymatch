@@ -6,6 +6,7 @@ import { Alert, Button, Image, Text, StyleSheet, Vibration, View } from 'react-n
 import GameBoard from './components/GameBoard';
 import instructionsText from './components/Instructions';
 import * as ScreenOrientation from 'expo-screen-orientation';
+import {Audio} from 'expo-av';
 
 const App = () => {
   // TO DO : Add game setup and logic here, including handling orientation, saving and loading game state, and using camera for custom images
@@ -139,6 +140,20 @@ const App = () => {
     setCards(shuffleCards(initialCardsData.map(card => ({ ...card, isFlipped: false }))));
   };
 
+  // Play win sound
+  async function playWinSound() {
+    const soundObject = new Audio.Sound();
+    try {
+      await soundObject.loadAsync(require('./assets/whoopup.mp3'));
+      await soundObject.playAsync();
+      soundObject.unloadAsync();
+    } catch (error) {
+      // An error occurred!
+      console.error(error);
+    }
+  }
+  
+
   //Check for win conditions
   useEffect(() => {
     // Check if all cards are matched
@@ -154,9 +169,13 @@ const App = () => {
             } else {
               message = `Congratulations, you won! Score: ${final}`;
     }
-    Alert.alert('Win',message,[{text: 'OK', onPress: newGame}]);
+    
+    // Play win sound before showing the alert
+    playWinSound().then(() => {
+      Alert.alert('Win', message, [{ text: 'OK', onPress: newGame }]);
+    });
   }
-  }, [matchedCards]);
+}, [matchedCards, baseTimeScore, revealScore, highScore]);
 
   // Function to show instructions (adapted from Mines Wept)
   const showInstructions = () => {
