@@ -199,7 +199,7 @@ const App = () => {
   return (
     <View style={styles.container}>
             <Image
-        source={require('./assets/memorymatchlogo.png')} 
+        source={require('./assets/memorymatchlogo.jpeg')} 
         style={styles.logo}
       />
         <View style={styles.buttonContainer}>

@@ -14,7 +14,7 @@ const Card = ({ image, onPress, size, isFlipped }) => {
   };
 
   // Image for the back of the card (when not flipped)
-  const cardBackImage = require('../assets/cardcover.png');
+  const cardBackImage = require('../assets/cardcover.jpeg');
 
   // Image for the front of the card (when flipped)
   const cardFrontImage = image; 
