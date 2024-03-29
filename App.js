@@ -40,6 +40,33 @@ const App = () => {
     const timerRef = useRef(null);
     const [baseTimeScore, setBaseTimeScore] = useState(500); 
 
+  //Start timer (adapted from Mines Wept)
+  const startTimer = () => {
+    if (timerRef.current !== null) return;
+    setTimer(0);
+    timerRef.current = setInterval(() => {
+      setTimer(t => t + 1);
+      //setBaseTimeScore(score => score - 1 * difficulties[difficulty].mineCount);
+    }, 1000);
+  };
+
+  //Stop timer (adapted from Mines Wept)
+  const stopTimer = () => {
+    if (timerRef.current !== null) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
+    }
+  };
+  
+  // useEffect to handle component mount and unmount
+  useEffect(() => {
+    //newGame('easy'); // Set the new game to easy on first load
+    startTimer();    // Start the timer immediately
+    
+    // Cleanup function to stop the timer when the component unmounts
+    return () => stopTimer(); 
+  }, []); // Empty dependency array means this runs once on mount
+
   // Shuffle cards
   const shuffleCards = (cards) => {
     // Shuffling logic here (Fisher-Yates shuffle, etc.)
@@ -88,23 +115,6 @@ const App = () => {
     Alert.alert("Instructions", instructionsText);
   };
 
-  //Start timer (adapted from Mines Wept)
-  const startTimer = () => {
-    if (timerRef.current !== null) return;
-    setTimer(0);
-    timerRef.current = setInterval(() => {
-      setTimer(t => t + 1);
-      //setBaseTimeScore(score => score - 1 * difficulties[difficulty].mineCount);
-    }, 1000);
-  };
-
-  //Stop timer (adapted from Mines Wept)
-  const stopTimer = () => {
-    if (timerRef.current !== null) {
-      clearInterval(timerRef.current);
-      timerRef.current = null;
-    }
-  };
 
   return (
     <View style={styles.container}>
