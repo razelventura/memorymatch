@@ -12,26 +12,26 @@ const App = () => {
     const initialCardsData = [
       { id: 1, image: require('./pics/image1.jpeg'), matched: false, isFlipped: false },
       { id: 2, image: require('./pics/image2.jpeg'), matched: false, isFlipped: false },
-/*       { id: 3, image: require('./pics/image3.jpeg'), matched: false, isFlipped: false },
+      { id: 3, image: require('./pics/image3.jpeg'), matched: false, isFlipped: false },
       { id: 4, image: require('./pics/image4.jpeg'), matched: false, isFlipped: false },
       { id: 5, image: require('./pics/image5.jpeg'), matched: false, isFlipped: false },
       { id: 6, image: require('./pics/image6.jpeg'), matched: false, isFlipped: false },
       { id: 7, image: require('./pics/image7.jpeg'), matched: false, isFlipped: false },
       { id: 8, image: require('./pics/image8.jpeg'), matched: false, isFlipped: false },
       { id: 9, image: require('./pics/image9.jpeg'), matched: false, isFlipped: false },
-      { id: 10, image: require('./pics/image10.jpeg'), matched: false, isFlipped: false }, */
+      { id: 10, image: require('./pics/image10.jpeg'), matched: false, isFlipped: false },
+      
       // Duplicate each card for matching
       { id: 1, image: require('./pics/image1.jpeg'), matched: false, isFlipped: false },
       { id: 2, image: require('./pics/image2.jpeg'), matched: false, isFlipped: false },
-/*       { id: 3, image: require('./pics/image3.jpeg'), matched: false, isFlipped: false },
+      { id: 3, image: require('./pics/image3.jpeg'), matched: false, isFlipped: false },
       { id: 4, image: require('./pics/image4.jpeg'), matched: false, isFlipped: false },
       { id: 5, image: require('./pics/image5.jpeg'), matched: false, isFlipped: false },
       { id: 6, image: require('./pics/image6.jpeg'), matched: false, isFlipped: false },
       { id: 7, image: require('./pics/image7.jpeg'), matched: false, isFlipped: false },
       { id: 8, image: require('./pics/image8.jpeg'), matched: false, isFlipped: false },
       { id: 9, image: require('./pics/image9.jpeg'), matched: false, isFlipped: false },
-      { id: 10, image: require('./pics/image10.jpeg'), matched: false, isFlipped: false }, */
-      // Will add more cards as needed
+      { id: 10, image: require('./pics/image10.jpeg'), matched: false, isFlipped: false },
     ];
 
     const [flippedCards, setFlippedCards] = useState([]);
