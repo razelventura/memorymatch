@@ -17,7 +17,7 @@ Welcome to Memory Match! Here's how to play:
 
 5. Click "Reset" to reset the current board and the time. This will not shuffle the cards, but this will un-reveal all matches you have already made.
 
-6. Click "New Game" to start with a new reshuffled board.
+6. Select a difficulty level to your liking. This will start a new reshuffled board.
 
 Get that brain exercising! Enjoy!
 `;
