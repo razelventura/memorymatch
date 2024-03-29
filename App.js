@@ -16,8 +16,8 @@ const App = () => {
       { id: 2, image: require('./pics/image2.jpeg'), matched: false, isFlipped: false },
       { id: 3, image: require('./pics/image3.jpeg'), matched: false, isFlipped: false },
       { id: 4, image: require('./pics/image4.jpeg'), matched: false, isFlipped: false },
-      { id: 5, image: require('./pics/image5.jpeg'), matched: false, isFlipped: false },
-      { id: 6, image: require('./pics/image6.jpeg'), matched: false, isFlipped: false },
+      //{ id: 5, image: require('./pics/image5.jpeg'), matched: false, isFlipped: false },
+      //{ id: 6, image: require('./pics/image6.jpeg'), matched: false, isFlipped: false },
       //{ id: 7, image: require('./pics/image7.jpeg'), matched: false, isFlipped: false },
       //{ id: 8, image: require('./pics/image8.jpeg'), matched: false, isFlipped: false },
       //{ id: 9, image: require('./pics/image9.jpeg'), matched: false, isFlipped: false },
@@ -28,8 +28,8 @@ const App = () => {
       { id: 2, image: require('./pics/image2.jpeg'), matched: false, isFlipped: false },
       { id: 3, image: require('./pics/image3.jpeg'), matched: false, isFlipped: false },
       { id: 4, image: require('./pics/image4.jpeg'), matched: false, isFlipped: false },
-      { id: 5, image: require('./pics/image5.jpeg'), matched: false, isFlipped: false },
-      { id: 6, image: require('./pics/image6.jpeg'), matched: false, isFlipped: false },
+      //{ id: 5, image: require('./pics/image5.jpeg'), matched: false, isFlipped: false },
+      //{ id: 6, image: require('./pics/image6.jpeg'), matched: false, isFlipped: false },
       //{ id: 7, image: require('./pics/image7.jpeg'), matched: false, isFlipped: false },
       //{ id: 8, image: require('./pics/image8.jpeg'), matched: false, isFlipped: false },
       //{ id: 9, image: require('./pics/image9.jpeg'), matched: false, isFlipped: false },
@@ -141,18 +141,21 @@ const App = () => {
     setCards(shuffleCards(initialCardsData.map(card => ({ ...card, isFlipped: false }))));
   };
 
+  const soundObject = new Audio.Sound();
+  
   // Play win sound
   async function playWinSound() {
-    const soundObject = new Audio.Sound();
     try {
+      await Audio.setAudioModeAsync({
+        playsInSilentModeIOS: true,
+      });
       await soundObject.loadAsync(require('./assets/whoopup.mp3'));
       await soundObject.playAsync();
-      soundObject.unloadAsync();
     } catch (error) {
-      // An error occurred!
       console.error(error);
     }
   }
+  
   
   //Check for win conditions
   useEffect(() => {
@@ -170,12 +173,12 @@ const App = () => {
               message = `Congratulations, you won! Score: ${final}`;
     }
 
-    // Play win sound before showing the alert
-    playWinSound().then(() => {
-      Alert.alert('Win', message, [{ text: 'OK', onPress: newGame }]);
-    });
+    // Play win sound together with the alert
+    playWinSound();
+    Alert.alert('Win', message, [{ text: 'OK', onPress: newGame }]);
+    soundObject.unloadAsync();
   }
-}, [matchedCards, baseTimeScore, revealScore, highScore]);
+}, [matchedCards]);
 
   // Function to show instructions (adapted from Mines Wept)
   const showInstructions = () => {
