@@ -2,7 +2,7 @@
 
 // App.js
 import React, { useState, useEffect, useRef } from 'react';
-import { Alert, Button, Image, Text, StyleSheet, View } from 'react-native';
+import { Alert, Button, Image, Text, StyleSheet, Vibration, View } from 'react-native';
 import GameBoard from './components/GameBoard';
 import instructionsText from './components/Instructions';
 import * as ScreenOrientation from 'expo-screen-orientation';
@@ -103,6 +103,9 @@ const App = () => {
       setCards(updatedCards);
       setMatchedCards(currentMatched => [...currentMatched, ...matchedIndices]);
       setRevealScore(currentScore => currentScore + 50); // Add 50 points for the match
+
+      // Vibrate to indicate a match
+      Vibration.vibrate(500) // 500ms
     }
   };
 
