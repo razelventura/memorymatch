@@ -102,7 +102,8 @@ const App = () => {
       });
   
       setCards(updatedCards);
-      setMatchedCards(currentMatched => [...currentMatched, ...matchedIndices]);
+      setMatchedCards(currentMatched => [...currentMatched, matchedIndices[0], matchedIndices[1]]); // matchedCards state only updated if a pair is found
+      //setMatchedCards(currentMatched => [...currentMatched, ...matchedIndices]);
       setRevealScore(currentScore => currentScore + 50); // Add 50 points for the match
 
       // Vibrate to indicate a match
@@ -153,11 +154,10 @@ const App = () => {
     }
   }
   
-
   //Check for win conditions
   useEffect(() => {
     // Check if all cards are matched
-    if (matchedCards.length === cards.length) {
+    if (matchedCards.length === initialCardsData.length * 2) {
       stopTimer();
       let final = baseTimeScore + revealScore;
       setFinalScore(final);
@@ -169,7 +169,7 @@ const App = () => {
             } else {
               message = `Congratulations, you won! Score: ${final}`;
     }
-    
+
     // Play win sound before showing the alert
     playWinSound().then(() => {
       Alert.alert('Win', message, [{ text: 'OK', onPress: newGame }]);
