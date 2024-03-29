@@ -8,7 +8,7 @@ const Card = ({ image, onPress, size, isFlipped }) => {
     justifyContent: 'center',
     alignItems: 'center',
     margin: 5,
-    borderWidth: 1,
+    //borderWidth: 1,
     borderColor: '#000',
     borderRadius: 10,
   };
