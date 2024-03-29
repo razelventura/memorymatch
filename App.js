@@ -12,26 +12,26 @@ const App = () => {
     const initialCardsData = [
       { id: 1, image: require('./pics/image1.jpeg'), matched: false, isFlipped: false },
       { id: 2, image: require('./pics/image2.jpeg'), matched: false, isFlipped: false },
-      { id: 3, image: require('./pics/image3.jpeg'), matched: false, isFlipped: false },
-      { id: 4, image: require('./pics/image4.jpeg'), matched: false, isFlipped: false },
-      { id: 5, image: require('./pics/image5.jpeg'), matched: false, isFlipped: false },
-      { id: 6, image: require('./pics/image6.jpeg'), matched: false, isFlipped: false },
-      { id: 7, image: require('./pics/image7.jpeg'), matched: false, isFlipped: false },
-      { id: 8, image: require('./pics/image8.jpeg'), matched: false, isFlipped: false },
-      { id: 9, image: require('./pics/image9.jpeg'), matched: false, isFlipped: false },
-      { id: 10, image: require('./pics/image10.jpeg'), matched: false, isFlipped: false },
+      //{ id: 3, image: require('./pics/image3.jpeg'), matched: false, isFlipped: false },
+      //{ id: 4, image: require('./pics/image4.jpeg'), matched: false, isFlipped: false },
+      //{ id: 5, image: require('./pics/image5.jpeg'), matched: false, isFlipped: false },
+      //{ id: 6, image: require('./pics/image6.jpeg'), matched: false, isFlipped: false },
+      //{ id: 7, image: require('./pics/image7.jpeg'), matched: false, isFlipped: false },
+      //{ id: 8, image: require('./pics/image8.jpeg'), matched: false, isFlipped: false },
+      //{ id: 9, image: require('./pics/image9.jpeg'), matched: false, isFlipped: false },
+      //{ id: 10, image: require('./pics/image10.jpeg'), matched: false, isFlipped: false },
       
       // Duplicate each card for matching
       { id: 1, image: require('./pics/image1.jpeg'), matched: false, isFlipped: false },
       { id: 2, image: require('./pics/image2.jpeg'), matched: false, isFlipped: false },
-      { id: 3, image: require('./pics/image3.jpeg'), matched: false, isFlipped: false },
-      { id: 4, image: require('./pics/image4.jpeg'), matched: false, isFlipped: false },
-      { id: 5, image: require('./pics/image5.jpeg'), matched: false, isFlipped: false },
-      { id: 6, image: require('./pics/image6.jpeg'), matched: false, isFlipped: false },
-      { id: 7, image: require('./pics/image7.jpeg'), matched: false, isFlipped: false },
-      { id: 8, image: require('./pics/image8.jpeg'), matched: false, isFlipped: false },
-      { id: 9, image: require('./pics/image9.jpeg'), matched: false, isFlipped: false },
-      { id: 10, image: require('./pics/image10.jpeg'), matched: false, isFlipped: false },
+      //{ id: 3, image: require('./pics/image3.jpeg'), matched: false, isFlipped: false },
+      //{ id: 4, image: require('./pics/image4.jpeg'), matched: false, isFlipped: false },
+      //{ id: 5, image: require('./pics/image5.jpeg'), matched: false, isFlipped: false },
+      //{ id: 6, image: require('./pics/image6.jpeg'), matched: false, isFlipped: false },
+      //{ id: 7, image: require('./pics/image7.jpeg'), matched: false, isFlipped: false },
+      //{ id: 8, image: require('./pics/image8.jpeg'), matched: false, isFlipped: false },
+      //{ id: 9, image: require('./pics/image9.jpeg'), matched: false, isFlipped: false },
+      //{ id: 10, image: require('./pics/image10.jpeg'), matched: false, isFlipped: false },
     ];
 
     const [flippedCards, setFlippedCards] = useState([]);
@@ -39,6 +39,9 @@ const App = () => {
     const [timer, setTimer] = useState(0);
     const timerRef = useRef(null);
     const [baseTimeScore, setBaseTimeScore] = useState(500); 
+    const [revealScore, setRevealScore] = useState(0);
+    const [finalScore, setFinalScore] = useState(0);
+    const [highScore, setHighScore] = useState(0);
 
   //Start timer (adapted from Mines Wept)
   const startTimer = () => {
@@ -46,7 +49,7 @@ const App = () => {
     setTimer(0);
     timerRef.current = setInterval(() => {
       setTimer(t => t + 1);
-      //setBaseTimeScore(score => score - 1 * difficulties[difficulty].mineCount);
+      setBaseTimeScore(score => score - 1);
     }, 1000);
   };
 
@@ -78,7 +81,28 @@ const App = () => {
 
   // handleMatch function
   const handleMatch = (selectedCard) => {
-    // Match checking logic here
+    // Find the two cards that match
+    const matchedIndices = cards.reduce((indices, card, index) => {
+      if (card.id === selectedCard.id) {
+        indices.push(index);
+      }
+      return indices;
+    }, []);
+  
+    // If a pair is found
+    if (matchedIndices.length === 2) {
+      // Update the matched state of the two cards
+      const updatedCards = cards.map((card, index) => {
+        if (matchedIndices.includes(index)) {
+          return { ...card, matched: true };
+        }
+        return card;
+      });
+  
+      setCards(updatedCards);
+      setMatchedCards(currentMatched => [...currentMatched, ...matchedIndices]);
+      setRevealScore(currentScore => currentScore + 50); // Add 50 points for the match
+    }
   };
 
   // Toggle flip state of a card
@@ -111,6 +135,25 @@ const App = () => {
     setCards(shuffleCards(initialCardsData.map(card => ({ ...card, isFlipped: false }))));
   };
 
+  //Check for win conditions
+  useEffect(() => {
+    // Check if all cards are matched
+    if (matchedCards.length === cards.length) {
+      stopTimer();
+      let final = baseTimeScore + revealScore;
+      setFinalScore(final);
+
+            // Check if the final score is higher than the high score
+            if (final > highScore) {
+              setHighScore(final);
+              message = `Congratulations, you won! New high score: ${final}`;
+            } else {
+              message = `Congratulations, you won! Score: ${final}`;
+    }
+    Alert.alert('Win',message,[{text: 'OK', onPress: newGame}]);
+  }
+  }, [matchedCards]);
+
   // Function to show instructions (adapted from Mines Wept)
   const showInstructions = () => {
     Alert.alert("Instructions", instructionsText);
@@ -127,7 +170,7 @@ const App = () => {
           <Button title="New Game" onPress={newGame} />
           <Button title="How to Play" onPress={showInstructions} />
       </View>
-      <Text> Scores and Timer will appear here </Text>
+      <Text> Current High Score: {highScore}</Text>
       <Text>Time (seconds): {timer}</Text>
       <GameBoard
         cards={cards}
