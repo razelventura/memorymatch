@@ -12,34 +12,41 @@ const GameBoard = ({
   matchedCards, 
   setMatchedCards }) => {
 
-  // Function to handle flipping a card
-  const flipCard = (index) => {
-    const card = cards[index];
+// Function to handle flipping a card
+const flipCard = (index) => {
+  const card = cards[index];
 
-    // Check if we should flip back the card
-    if (flippedCards.includes(index)) {
-      setFlippedCards(flippedCards.filter(i => i !== index));
-      return;
-    }
+  // Check if the card is already flipped or matched
+  if (flippedCards.includes(index) || matchedCards.includes(index)) {
+    return; // Do nothing if the card is already flipped or matched
+  }
 
-    // Check if we should match cards
-    if (flippedCards.length === 1) {
-      const firstCardIndex = flippedCards[0];
-      const firstCard = cards[firstCardIndex];
+  // Temporarily add this card to the flippedCards state to show it
+  setFlippedCards([...flippedCards, index]);
+
+  // Check if this is the second card being flipped
+  if (flippedCards.length === 1) {
+    const firstCardIndex = flippedCards[0];
+    const firstCard = cards[firstCardIndex];
+
+    // Add a delay to allow the user to see the second card
+    setTimeout(() => {
       if (firstCard.id === card.id) {
+        // If cards match, add them to matchedCards state
         setMatchedCards([...matchedCards, firstCardIndex, index]);
-        onMatch(card); // This function can be used to handle score updates or any other match logic
+        onMatch(card); // Handle score updates or any other match logic
       }
-      setFlippedCards([]); // Reset flipped cards
-    } else {
-      setFlippedCards([index]); // Flip the new card
-    }
-  };
+      // Whether they match or not, reset flippedCards to empty
+      setFlippedCards([]);
+    }, 500); // 1000 milliseconds delay before resetting
+  }
+};
+
 
   // Calculate the number of columns and card size based on screen width
   const screenWidth = Dimensions.get('window').width;
   const cardMargin = 5;
-  const cardSize = (screenWidth - cardMargin * 2 * 3) / 5; // 3 cards per row TO DO: adjust per difficulty level
+  const cardSize = (screenWidth - cardMargin * 2 * 3) / 5; 
 
   return (
     <View style={styles.board}>
