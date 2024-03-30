@@ -45,10 +45,12 @@ For every correctly matched pair, the player gets 50 points. Therefore, increasi
 The cards are randomly shuffled every new game. The first press will reveal a card, if the second press matches the card, they will both remain revealed; else, they will both be returned to their unflipped state.
 
 ## OTHERS
-The phone will vibrate for 200ms when a match is made.
-A sound effect plays when a user wins.
-The game state (difficulty level and high score) is saved. 
+The phone will vibrate for 200ms when a match is made.  
+
+A sound effect plays when a user wins.  
+
+The game state (difficulty level and high score) is saved.   
 
 ## NOTE TO STEPHEN
-This was only tested on iOS. 
+This was only tested on iOS.   
 I was granted extension on the deadline due to medical reasons.
