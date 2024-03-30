@@ -195,6 +195,7 @@ const App = () => {
   const changeDifficulty = (newDifficulty) => {
   stopTimer(); // Stop the current timer
   setDifficulty(newDifficulty); // Update the difficulty state
+  saveGameState();
   newGame(newDifficulty); // Start a new game with the new difficulty
 };
 
@@ -224,6 +225,7 @@ const App = () => {
             // Check if the final score is higher than the high score
             if (final > highScore) {
               setHighScore(final);
+              saveGameState();
               message = `Congratulations, you won! New high score: ${final}`;
             } else {
               message = `Congratulations, you won! Score: ${final}`;
