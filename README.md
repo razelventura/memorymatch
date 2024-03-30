@@ -31,12 +31,12 @@ Win - all matches are revealed
 The scores are based on time and # of matches made. 
 
 
-Time Score:
+**Time Score**
 
 There is a base score of 500. 1point is deducted from this for every second elapsed.
 
 
-Match Score: 
+**Match Score** 
 
 For every correctly matched pair, the player gets 50 points. Therefore, increasing the difficulty also increases the possible points to earn.
 
