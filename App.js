@@ -5,6 +5,7 @@ import GameBoard from './components/GameBoard';
 import instructionsText from './components/Instructions';
 import * as ScreenOrientation from 'expo-screen-orientation';
 import {Audio} from 'expo-av';
+import * as FileSystem from 'expo-file-system';
 
 const App = () => {
 
@@ -16,7 +17,51 @@ const App = () => {
   const [revealScore, setRevealScore] = useState(0);
   const [finalScore, setFinalScore] = useState(0);
   const [highScore, setHighScore] = useState(0);
-  const [difficulty, setDifficulty] = useState('easy'); 
+  const [difficulty, setDifficulty] = useState('easy');
+  const gameStateFile = FileSystem.documentDirectory + 'gameState.json';
+
+  // Function to load the game state
+  const loadGameState = async () => {
+    try {
+      // First, check if the file exists
+      const fileInfo = await FileSystem.getInfoAsync(gameStateFile);
+      if (!fileInfo.exists) {
+        console.log('Game state file does not exist, initializing with default values.');
+        // Initialize with default values
+        setDifficulty('easy'); // Default difficulty
+        setHighScore(0); // Default high score
+        // Consider saving these defaults now
+        await saveGameState();
+      } else {
+        // If the file exists, proceed with loading
+        const gameStateString = await FileSystem.readAsStringAsync(gameStateFile);
+        const gameState = JSON.parse(gameStateString);
+        setDifficulty(gameState.difficulty);
+        setHighScore(gameState.highScore);
+      }
+    } catch (error) {
+      console.log('Error loading game state:', error);
+    }
+  };
+
+  // Function to save the game state
+  const saveGameState = async () => {
+    try {
+      const gameState = {
+        difficulty: difficulty,
+        highScore: highScore,
+      };
+      await FileSystem.writeAsStringAsync(gameStateFile, JSON.stringify(gameState));
+    } catch (error) {
+      console.log('Error saving game state:', error);
+    }
+  }; 
+
+  // useEffect for component mount and unmount
+  useEffect(() => {
+    loadGameState();
+    return () => saveGameState();
+  }, []);
 
     // All available cards
     const allCardsData = [
